@@ -16,6 +16,6 @@ spec:
         - name: "DB"
           value: testdb
         - name: "HOST"
-          value: 35.225.61.225
+          value: 35.193.120.197
         - name: "USER"
           value: root
