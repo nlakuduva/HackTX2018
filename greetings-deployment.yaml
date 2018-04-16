@@ -16,7 +16,7 @@ spec:
     spec:
       containers:
       - name: greetings1
-        image: gcr.io/cloudark-test-gke/greetings:v1
+        image: gcr.io/assignment5-200917/greetings:v2
         ports:
         - containerPort: 5000
         env:

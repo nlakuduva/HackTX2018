@@ -11,10 +11,10 @@ app = application
 
 
 def get_db_creds():
-    db = os.environ.get("RDS_DB_NAME", None)
-    username = os.environ.get("RDS_USERNAME", None)
-    password = os.environ.get("RDS_PASSWORD", None)
-    hostname = os.environ.get("RDS_HOSTNAME", None)
+    db = os.environ.get("DB", None)
+    username = os.environ.get("USER", None)
+    password = os.environ.get("PASSWORD", None)
+    hostname = os.environ.get("HOST", None)
     return db, username, password, hostname
 
 
