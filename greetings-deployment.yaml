@@ -1,0 +1,30 @@
+apiVersion: apps/v1beta1
+kind: Deployment
+metadata:
+  name: assign5-deployment
+  labels:
+    app: assign5
+spec:
+  replicas: 1 
+  selector:
+    matchLabels:
+      app: assign5
+  template:
+    metadata:
+      labels:
+        app: assign5
+    spec:
+      containers:
+      - name: assign51
+        image: gcr.io/cloudark-test-gke/greetings:v1
+        ports:
+        - containerPort: 5000
+        env:
+          - name: "PASSWORD"
+            value: testpass123!@#
+          - name: "DB"
+            value: testdb
+          - name: "HOST"
+            value: 35.225.61.225
+          - name: "USER"
+            value: root
