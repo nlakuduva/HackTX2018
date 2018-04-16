@@ -36,7 +36,6 @@ def create_table():
     try:
         cur.execute(table_ddl)
         cnx.commit()
-        populate_data()
     except mysql.connector.Error as err:
         if err.errno == errorcode.ER_TABLE_EXISTS_ERROR:
             print("already exists.")
