@@ -1,21 +1,21 @@
 apiVersion: apps/v1beta1
 kind: Deployment
 metadata:
-  name: assign5-deployment
+  name: greetings-deployment
   labels:
-    app: assign5
+    app: greetings
 spec:
   replicas: 1 
   selector:
     matchLabels:
-      app: assign5
+      app: greetings
   template:
     metadata:
       labels:
-        app: assign5
+        app: greetings
     spec:
       containers:
-      - name: assign51
+      - name: greetings1
         image: gcr.io/cloudark-test-gke/greetings:v1
         ports:
         - containerPort: 5000
