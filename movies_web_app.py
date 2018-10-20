@@ -3,44 +3,42 @@ import time
 
 from flask import request
 from flask import Flask, render_template, jsonify
-import mysql.connector
-from mysql.connector import errorcode
+import pyodbc 
 
 application = Flask(__name__)
 app = application
 
 
 def get_db_creds():
-    db = os.environ.get("DB", None)
-    username = os.environ.get("USER", None)
-    password = os.environ.get("PASSWORD", None)
-    hostname = os.environ.get("HOST", None)
+#     db = os.environ.get("DB", None)
+#     username = os.environ.get("USER", None)
+#     password = os.environ.get("PASSWORD", None)
+#     hostname = os.environ.get("HOST", None)
+    db, username, password, hostname = "HackTX2018", "Hacktx", "Password1234", "hacktx2018.database.windows.net"
     return db, username, password, hostname
 
 
 def create_table():
     # Check if table exists or not. Create and populate it only if it does not exist.
-    db, username, password, hostname = get_db_creds()
-    table_ddl = 'CREATE TABLE movies(id INT UNSIGNED NOT NULL AUTO_INCREMENT, year INT, title TEXT, director TEXT, actor TEXT, release_date TEXT, rating REAL, PRIMARY KEY (id))'
+    # db, username, password, hostname = get_db_creds()
+    table_ddl = 'DROP TABLE movies; CREATE TABLE movies(id INT NOT NULL, year INT, title VARCHAR, director VARCHAR, actor VARCHAR, release_date CHAR, rating REAL, PRIMARY KEY (id))'
 
     cnx = ''
     try:
-        cnx = mysql.connector.connect(user=username, password=password,
-                                      host=hostname,
-                                      database=db)
+        cnx = pyodbc.connect("Driver={ODBC Driver 13 for SQL Server};Server=tcp:hacktx2018.database.windows.net,1433;Database=HackTX2018;Uid=hacktx@hacktx2018;Pwd=Password1234;Encrypt=yes;TrustServerCertificate=no;")
     except Exception as exp:
         print(exp)
 
     cur = cnx.cursor()
 
-    try:
-        cur.execute(table_ddl)
-        cnx.commit()
-    except mysql.connector.Error as err:
-        if err.errno == errorcode.ER_TABLE_EXISTS_ERROR:
-            print("already exists.")
-        else:
-            print(err.msg)
+    # try:
+    cur.execute(table_ddl)
+    cnx.commit()
+    # except mysql.connector.Error as err:
+    #     if err.errno == errorcode.ER_TABLE_EXISTS_ERROR:
+    #         print("already exists.")
+    #     else:
+    #         print(err.msg)
 
 
 @app.route('/add_movie', methods=['POST'])
@@ -58,13 +56,9 @@ def add_movie():
 
     cnx = ''
     try:
-        cnx = mysql.connector.connect(user=username, password=password,
-                                      host=hostname,
-                                      database=db)
+        cnx = pyodbc.connect("Driver={ODBC Driver 13 for SQL Server};Server=tcp:hacktx2018.database.windows.net,1433;Database=HackTX2018;Uid=hacktx@hacktx2018;Pwd=Password1234;Encrypt=yes;TrustServerCertificate=no;Connection Timeout=30;")
     except Exception as exp:
         print(exp)
-        import MySQLdb
-        cnx = MySQLdb.connect(unix_socket=hostname, user=username, passwd=password, db=db)
 
     cur = cnx.cursor()
     messages = []
@@ -101,13 +95,9 @@ def update_movie():
 
     cnx = ''
     try:
-        cnx = mysql.connector.connect(user=username, password=password,
-                                      host=hostname,
-                                      database=db)
+        cnx = pyodbc.connect("Driver={ODBC Driver 13 for SQL Server};Server=tcp:hacktx2018.database.windows.net,1433;Database=HackTX2018;Uid=hacktx@hacktx2018;Pwd=Password1234;Encrypt=yes;TrustServerCertificate=no;")
     except Exception as exp:
         print(exp)
-        import MySQLdb
-        cnx = MySQLdb.connect(unix_socket=hostname, user=username, passwd=password, db=db)
 
     cur = cnx.cursor()
     messages = []
@@ -138,13 +128,9 @@ def delete_movie():
 
     cnx = ''
     try:
-        cnx = mysql.connector.connect(user=username, password=password,
-                                      host=hostname,
-                                      database=db)
+        cnx = pyodbc.connect("Driver={ODBC Driver 13 for SQL Server};Server=tcp:hacktx2018.database.windows.net,1433;Database=HackTX2018;Uid=hacktx@hacktx2018;Pwd=Password1234;Encrypt=yes;TrustServerCertificate=no;")
     except Exception as exp:
         print(exp)
-        import MySQLdb
-        cnx = MySQLdb.connect(unix_socket=hostname, user=username, passwd=password, db=db)
 
     cur = cnx.cursor()
     messages = []
@@ -175,13 +161,9 @@ def search_movie():
 
     cnx = ''
     try:
-        cnx = mysql.connector.connect(user=username, password=password,
-                                      host=hostname,
-                                      database=db)
+        cnx = pyodbc.connect("Driver={ODBC Driver 13 for SQL Server};Server=tcp:hacktx2018.database.windows.net,1433;Database=HackTX2018;Uid=hacktx@hacktx2018;Pwd=Password1234;Encrypt=yes;TrustServerCertificate=no;")
     except Exception as exp:
         print(exp)
-        import MySQLdb
-        cnx = MySQLdb.connect(unix_socket=hostname, user=username, passwd=password, db=db)
 
     cur = cnx.cursor()
     messages = []
@@ -209,13 +191,9 @@ def highest_rating():
 
     cnx = ''
     try:
-        cnx = mysql.connector.connect(user=username, password=password,
-                                      host=hostname,
-                                      database=db)
+        cnx = pyodbc.connect("Driver={ODBC Driver 13 for SQL Server};Server=tcp:hacktx2018.database.windows.net,1433;Database=HackTX2018;Uid=hacktx@hacktx2018;Pwd=Password1234;Encrypt=yes;TrustServerCertificate=no;")
     except Exception as exp:
         print(exp)
-        import MySQLdb
-        cnx = MySQLdb.connect(unix_socket=hostname, user=username, passwd=password, db=db)
 
     cur = cnx.cursor()
     messages = []
@@ -242,13 +220,9 @@ def lowest_rating():
 
     cnx = ''
     try:
-        cnx = mysql.connector.connect(user=username, password=password,
-                                      host=hostname,
-                                      database=db)
+        cnx = pyodbc.connect("Driver={ODBC Driver 13 for SQL Server};Server=tcp:hacktx2018.database.windows.net,1433;Database=HackTX2018;Uid=hacktx@hacktx2018;Pwd=Password1234;Encrypt=yes;TrustServerCertificate=no;")
     except Exception as exp:
         print(exp)
-        import MySQLdb
-        cnx = MySQLdb.connect(unix_socket=hostname, user=username, passwd=password, db=db)
 
     cur = cnx.cursor()
     messages = []
