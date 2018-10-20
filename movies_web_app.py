@@ -10,18 +10,13 @@ app = application
 
 
 def get_db_creds():
-#     db = os.environ.get("DB", None)
-#     username = os.environ.get("USER", None)
-#     password = os.environ.get("PASSWORD", None)
-#     hostname = os.environ.get("HOST", None)
     db, username, password, hostname = "HackTX2018", "Hacktx", "Password1234", "hacktx2018.database.windows.net"
     return db, username, password, hostname
 
 
 def create_table():
     # Check if table exists or not. Create and populate it only if it does not exist.
-    # db, username, password, hostname = get_db_creds()
-    table_ddl = 'DROP TABLE if exists movies; CREATE TABLE movies(id INT NOT NULL, year INT, title VARCHAR, director VARCHAR, actor VARCHAR, release_date CHAR, rating REAL, PRIMARY KEY (id))'
+    table_ddl = 'CREATE TABLE entrepreneurs(name VARCHAR, value INT, shares INT)'
 
     cnx = ''
     try:
@@ -30,29 +25,26 @@ def create_table():
         print(exp)
 
     cur = cnx.cursor()
+    print("CONNECTED IN CREATE TABLE")
 
-    # try:
-    cur.execute(table_ddl)
+    try:
+        cur.execute(table_ddl)
+    except Exception as exp:
+        print(exp)
+
+    print("EXECUTED IN CREATE TABLE")
+
     cnx.commit()
-    # except mysql.connector.Error as err:
-    #     if err.errno == errorcode.ER_TABLE_EXISTS_ERROR:
-    #         print("already exists.")
-    #     else:
-    #         print(err.msg)
 
 
-@app.route('/add_movie', methods=['POST'])
-def add_movie():
+@app.route('/add_user', methods=['POST'])
+def add_user():
     print("Received request.")
-    print(request.form['title'])
-    year = request.form['year']
-    title = request.form['title'].upper()
-    director = request.form['director'].upper()
-    actor = request.form['actor'].upper()
-    release_date = request.form['release_date']
-    rating = request.form['rating']
-
-    db, username, password, hostname = get_db_creds()
+    # print(request.form['name'])
+    name = str(request.form['name'])
+    value = str(request.form['value'])
+    shares = str(request.form['shares'])
+    print(name, value, shares)
 
     cnx = ''
     try:
@@ -60,36 +52,38 @@ def add_movie():
     except Exception as exp:
         print(exp)
 
+    print("PAST CONNECTION")
+
     cur = cnx.cursor()
     messages = []
     try:
-        cur.execute("SELECT * FROM movies WHERE title='" + title + "'")
-        # movie already in db
+        print("START")
+        cur.execute("SELECT * FROM entrepreneurs WHERE CONVERT(VARCHAR, name)='" + name + "'")
+        print("CHECKING IF EXISTS")
+        # user already in db
         if len(cur.fetchall()) > 0:
-            message = ('Movie %s already in database. Please use Update Movie to edit movie.' % (title))
+            message = ('User %s already in database. Please use Update user to edit user.' % (name))
             messages.append(dict(message=message))
-        # insert movie
+        # user user
         else:
-            cur.execute("INSERT INTO movies (year, title, director, actor, release_date, rating) values ('" + year + "', '" + title + "', '" + director + "', '" + actor + "', '" + release_date + "', '" + rating + "')")
-            message = ('Movie %s successfully inserted' % (title))
+            print("INSERTING user")
+            cur.execute("INSERT INTO entrepreneurs (name, value, shares) values ('" + name + "', '" + value + "', '" + shares + "')")
+            message = ('User %s successfully inserted' % (name))
             messages.append(dict(message=message))
         cnx.commit()
     except Exception as exp:
-        message = ('Movie %s could not be inserted - %s' % (title, exp))
+        message = ('User %s could not be inserted - %s' % (name, exp))
         messages.append(dict(message=message))
 
+    print("DONE")
     return hello(messages)
 
-@app.route('/update_movie', methods=['POST'])
-def update_movie():
+@app.route('/update_user', methods=['POST'])
+def update_user():
     print("Received request.")
-    print(request.form['title'])
-    year = request.form['year']
-    title = request.form['title'].upper()
-    director = request.form['director'].upper()
-    actor = request.form['actor'].upper()
-    release_date = request.form['release_date']
-    rating = request.form['rating']
+    name = request.form['name']
+    value = request.form['value']
+    shares = request.form['shares']
 
     db, username, password, hostname = get_db_creds()
 
@@ -102,27 +96,27 @@ def update_movie():
     cur = cnx.cursor()
     messages = []
     try:
-        cur.execute("SELECT * FROM movies WHERE title='" + title + "'")
-        # update movie
+        cur.execute("SELECT * FROM entrepreneurs WHERE CONVERT(VARCHAR, name)='" + name + "'")
+        # update user
         if len(cur.fetchall()) > 0:
-            cur.execute("UPDATE movies SET year='" + year + "', director='" + director + "', actor='" + actor + "', release_date='" + release_date + "', rating='" + rating + "' WHERE title='" + title + "'")
-            message = ('Movie %s successfully updated ' % (title))
+            cur.execute("UPDATE entrepreneurs SET year='" + year + "', director='" + director + "', actor='" + actor + "', release_date='" + release_date + "', rating='" + rating + "' WHERE name='" + name + "'")
+            message = ('user %s successfully updated ' % (name))
             messages.append(dict(message=message))
-        # movie doesn't exist
+        # user doesn't exist
         else:
-            message = ('Movie with title %s does not exist' % (title))
+            message = ('user with name %s does not exist' % (name))
             messages.append(dict(message=message))
         cnx.commit()
     except Exception as exp:
-        message = ('Movie %s could not be inserted - %s' % (title, exp))
+        message = ('user %s could not be inserted - %s' % (name, exp))
         messages.append(dict(message=message))
 
     return hello(messages)
-@app.route('/delete_movie', methods=['POST'])
-def delete_movie():
+@app.route('/delete_user', methods=['POST'])
+def delete_user():
     print("Received request.")
-    print(request.form['delete_title'])
-    title = request.form['delete_title'].upper()
+    print(request.form['delete_name'])
+    name = request.form['delete_name']
 
     db, username, password, hostname = get_db_creds()
 
@@ -135,27 +129,27 @@ def delete_movie():
     cur = cnx.cursor()
     messages = []
     try:
-        cur.execute("SELECT * FROM movies WHERE title='" + title + "'")
-        # delete movie
+        print("DELETE START")
+        cur.execute("SELECT * FROM entrepreneurs WHERE CONVERT(VARCHAR, name)='" + name + "'")
+        # delete user
         if len(cur.fetchall()) > 0:
-            cur.execute("DELETE FROM movies WHERE title='" + title + "'")
-            message = ('Movie %s successfully deleted ' % (title))
+            cur.execute("DELETE FROM entrepreneurs WHERE CONVERT(VARCHAR, name)='" + name + "'")
+            message = ('user %s successfully deleted ' % (name))
             messages.append(dict(message=message))
-        # movie doesn't exist
+        # user doesn't exist
         else:
-            message = ('Movie with %s does not exist' % (title))
+            message = ('user with %s does not exist' % (name))
             messages.append(dict(message=message))
         cnx.commit()
     except Exception as exp:
-        message = ('Movie %s could not be deleted - %s' % (title, exp))
+        message = ('user %s could not be deleted - %s' % (name, exp))
         messages.append(dict(message=message))
     return hello(messages)
 
-@app.route('/search_movie', methods=['GET'])
-def search_movie():
+@app.route('/search_user', methods=['GET'])
+def search_user():
     print("Received request.")
-    # print(request.form['search_actor'])
-    actor = request.args.get('search_actor').upper()
+    user = request.args.get('search_user').upper()
 
     db, username, password, hostname = get_db_creds()
 
@@ -168,14 +162,14 @@ def search_movie():
     cur = cnx.cursor()
     messages = []
     try:
-        cur.execute("SELECT title, year, actor FROM movies WHERE actor='" + actor + "'")
+        cur.execute("SELECT name, value, shares FROM entrepreneurs WHERE CONVERT(VARCHAR, name)='" + user + "'")
         # search
         results = cur.fetchall()
         if len(results) > 0:
-            messages = [dict(message=("Title: " + str(row[0]) + ", Year: " + str(row[1]) + ", Actor: " + str(row[2]))) for row in results]
-        # movies with actor doesn't exist
+            messages = [dict(message=("Name: " + str(row[0]) + ", Company Value: " + str(row[1]) + ", Number of Shares: " + str(row[2]) + ", Price Per Share: $ " + str(int(row[1])/int(row[2])))) for row in results]
+        # entrepreneurs with actor doesn't exist
         else:
-            message = ('No movies found for actor %s' % (actor))
+            message = ('No entrepreneurs found for user %s' % (user))
             messages.append(dict(message=message))
         cnx.commit()
     except Exception as exp:
@@ -199,13 +193,13 @@ def highest_rating():
     messages = []
     try:
         # highest rating
-        cur.execute("SELECT title, year, actor, director, rating FROM movies WHERE rating=(SELECT max(rating) FROM movies)")
+        cur.execute("SELECT name, year, actor, director, rating FROM entrepreneurs WHERE rating=(SELECT max(rating) FROM entrepreneurs)")
         results = cur.fetchall()
         if len(results) == 0:
-            message = ('No movies in database. Please insert some movies first.')
+            message = ('No entrepreneurs in database. Please insert some entrepreneurs first.')
             messages.append(dict(message=message))
             return hello(messages)
-        messages = [dict(message=("Title: " + str(row[0]) + ", Year: " + str(row[1]) + ", Actor: " + str(row[2]) + ", Director: " + str(row[3]) + ", Rating: " + str(row[4]))) for row in results]
+        messages = [dict(message=("name: " + str(row[0]) + ", Year: " + str(row[1]) + ", Actor: " + str(row[2]) + ", Director: " + str(row[3]) + ", Rating: " + str(row[4]))) for row in results]
         cnx.commit()
     except Exception as exp:
         message = ('Request failed - %s' % (exp))
@@ -228,13 +222,13 @@ def lowest_rating():
     messages = []
     try:
         # lowest rating
-        cur.execute("SELECT title, year, actor, director, rating FROM movies WHERE rating=(SELECT min(rating) FROM movies)")
+        cur.execute("SELECT name, year, actor, director, rating FROM entrepreneurs WHERE rating=(SELECT min(rating) FROM entrepreneurs)")
         results = cur.fetchall()
         if len(results) == 0:
-            message = ('No movies in database. Please insert some movies first.')
+            message = ('No entrepreneurs in database. Please insert some entrepreneurs first.')
             messages.append(dict(message=message))
             return hello(messages)
-        messages = [dict(message=("Title: " + str(row[0]) + ", Year: " + str(row[1]) + ", Actor: " + str(row[2]) + ", Director: " + str(row[3]) + ", Rating: " + str(row[4]))) for row in results]
+        messages = [dict(message=("name: " + str(row[0]) + ", Year: " + str(row[1]) + ", Actor: " + str(row[2]) + ", Director: " + str(row[3]) + ", Rating: " + str(row[4]))) for row in results]
         cnx.commit()
     except Exception as exp:
         message = ('Request failed - %s' % (exp))

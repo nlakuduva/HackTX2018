@@ -26,33 +26,42 @@
 
   <div class="bodycenter">
  
-    <form action="add_movie" method="post">
-      <h4>Insert Movie</h4>
+    <form action="add_user" method="post">
+      <h4>Insert Startup User</h4>
       <br>
-      Year: <input type="text" name="year"><br>
-      Title: <input type="text" name="title"><br>
-      Director: <input type="text" name="director"><br>
-      Actor: <input type="text" name="actor"><br>
-      Release Date: <input type="text" name="release_date"><br>
-      Rating: <input type="text" name="rating"><br>
-      <input type="submit" value="Insert Movie">
+      Name: <input type="text" name="name"><br>
+      Company Value: <input type="text" name="value"><br>
+      Number of Shares: <input type="text" name="shares"><br>
+      <!-- Actor: <input type="text" name="actor"><br> -->
+      <!-- Release Date: <input type="text" name="release_date"><br> -->
+      <!-- Rating: <input type="text" name="rating"><br> -->
+      <input type="submit" value="Insert User">
     </form>
     
-    <div class="footer">
+<!--     <div class="footer">
     </div>
   </div>
   <div class="bodycenter">
 
-    <form action="update_movie" method="post">
-      <h4>Update Movie</h4>
+    <form action="update_user" method="post">
+      <h4>Update Startup User</h4>
       <br>
-      Year: <input type="text" name="year"><br>
-      Title: <input type="text" name="title"><br>
-      Director: <input type="text" name="director"><br>
-      Actor: <input type="text" name="actor"><br>
-      Release Date: <input type="text" name="release_date"><br>
-      Rating: <input type="text" name="rating"><br>
-      <input type="submit" value="Update Movie">
+      Name: <input type="text" name="name"><br>
+      Company Value: <input type="text" name="value"><br>
+      Number of Shares: <input type="text" name="shares"><br>
+      <input type="submit" value="Update user">
+    </form> -->
+    
+    <div class="footer">
+    </div>
+  </div>
+  <div class="bodycenter">
+ 
+    <form action="delete_user" method="post">
+      <h4>Delete Starup User</h4>
+      <br>
+      Name: <input type="text" name="delete_name"><br>
+      <input type="submit" value="Delete user">
     </form>
     
     <div class="footer">
@@ -60,43 +69,31 @@
   </div>
   <div class="bodycenter">
  
-    <form action="delete_movie" method="post">
-      <h4>Delete Movie</h4>
+    <form action="search_user" method="get">
+      <h4>Search Startup User</h4>
       <br>
-      Title: <input type="text" name="delete_title"><br>
-      <input type="submit" value="Delete Movie">
+      Actor: <input type="text" name="search_user"><br>
+      <input type="submit" value="Search entrepreneurs">
     </form>
     
     <div class="footer">
     </div>
   </div>
-  <div class="bodycenter">
+<!--   <div class="bodycenter">
  
-    <form action="search_movie" method="get">
-      <h4>Search Movie</h4>
-      <br>
-      Actor: <input type="text" name="search_actor"><br>
-      <input type="submit" value="Search Movies">
-    </form>
-    
-    <div class="footer">
-    </div>
-  </div>
-  <div class="bodycenter">
- 
-    <h4>Print movie</h4>
+    <h4>Print user</h4>
     <form action="highest_rating" method="get">
       <br>
-      <input type="submit" value="Highest Rating movie">
+      <input type="submit" value="Highest Rating user">
     </form>
     
     <form action="lowest_rating" method="get">
       <br>
-      <input type="submit" value="Lowest Rating movie">
+      <input type="submit" value="Lowest Rating user">
     </form>
 
     <div class="footer">
     </div>
-  </div>
+  </div> -->
 </body>
 </html>
