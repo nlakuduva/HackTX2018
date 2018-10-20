@@ -21,11 +21,11 @@ def get_db_creds():
 def create_table():
     # Check if table exists or not. Create and populate it only if it does not exist.
     # db, username, password, hostname = get_db_creds()
-    table_ddl = 'DROP TABLE movies; CREATE TABLE movies(id INT NOT NULL, year INT, title VARCHAR, director VARCHAR, actor VARCHAR, release_date CHAR, rating REAL, PRIMARY KEY (id))'
+    table_ddl = 'DROP TABLE if exists movies; CREATE TABLE movies(id INT NOT NULL, year INT, title VARCHAR, director VARCHAR, actor VARCHAR, release_date CHAR, rating REAL, PRIMARY KEY (id))'
 
     cnx = ''
     try:
-        cnx = pyodbc.connect("Driver={ODBC Driver 13 for SQL Server};Server=tcp:hacktx2018.database.windows.net,1433;Database=HackTX2018;Uid=hacktx@hacktx2018;Pwd=Password1234;Encrypt=yes;TrustServerCertificate=no;")
+        cnx = pyodbc.connect("Driver={ODBC Driver 13 for SQL Server};Server=tcp:hacktx2018.database.windows.net,1433;Database=HackTX2018;Uid=hacktx@hacktx2018;Pwd=Password1234;Encrypt=yes;TrustServerCertificate=no;Connection Timeout=30;")
     except Exception as exp:
         print(exp)
 
@@ -95,7 +95,7 @@ def update_movie():
 
     cnx = ''
     try:
-        cnx = pyodbc.connect("Driver={ODBC Driver 13 for SQL Server};Server=tcp:hacktx2018.database.windows.net,1433;Database=HackTX2018;Uid=hacktx@hacktx2018;Pwd=Password1234;Encrypt=yes;TrustServerCertificate=no;")
+        cnx = pyodbc.connect("Driver={ODBC Driver 13 for SQL Server};Server=tcp:hacktx2018.database.windows.net,1433;Database=HackTX2018;Uid=hacktx@hacktx2018;Pwd=Password1234;Encrypt=yes;TrustServerCertificate=no;Connection Timeout=30;")
     except Exception as exp:
         print(exp)
 
@@ -128,7 +128,7 @@ def delete_movie():
 
     cnx = ''
     try:
-        cnx = pyodbc.connect("Driver={ODBC Driver 13 for SQL Server};Server=tcp:hacktx2018.database.windows.net,1433;Database=HackTX2018;Uid=hacktx@hacktx2018;Pwd=Password1234;Encrypt=yes;TrustServerCertificate=no;")
+        cnx = pyodbc.connect("Driver={ODBC Driver 13 for SQL Server};Server=tcp:hacktx2018.database.windows.net,1433;Database=HackTX2018;Uid=hacktx@hacktx2018;Pwd=Password1234;Encrypt=yes;TrustServerCertificate=no;Connection Timeout=30;")
     except Exception as exp:
         print(exp)
 
@@ -161,7 +161,7 @@ def search_movie():
 
     cnx = ''
     try:
-        cnx = pyodbc.connect("Driver={ODBC Driver 13 for SQL Server};Server=tcp:hacktx2018.database.windows.net,1433;Database=HackTX2018;Uid=hacktx@hacktx2018;Pwd=Password1234;Encrypt=yes;TrustServerCertificate=no;")
+        cnx = pyodbc.connect("Driver={ODBC Driver 13 for SQL Server};Server=tcp:hacktx2018.database.windows.net,1433;Database=HackTX2018;Uid=hacktx@hacktx2018;Pwd=Password1234;Encrypt=yes;TrustServerCertificate=no;Connection Timeout=30;")
     except Exception as exp:
         print(exp)
 
@@ -191,7 +191,7 @@ def highest_rating():
 
     cnx = ''
     try:
-        cnx = pyodbc.connect("Driver={ODBC Driver 13 for SQL Server};Server=tcp:hacktx2018.database.windows.net,1433;Database=HackTX2018;Uid=hacktx@hacktx2018;Pwd=Password1234;Encrypt=yes;TrustServerCertificate=no;")
+        cnx = pyodbc.connect("Driver={ODBC Driver 13 for SQL Server};Server=tcp:hacktx2018.database.windows.net,1433;Database=HackTX2018;Uid=hacktx@hacktx2018;Pwd=Password1234;Encrypt=yes;TrustServerCertificate=no;Connection Timeout=30;")
     except Exception as exp:
         print(exp)
 
@@ -220,7 +220,7 @@ def lowest_rating():
 
     cnx = ''
     try:
-        cnx = pyodbc.connect("Driver={ODBC Driver 13 for SQL Server};Server=tcp:hacktx2018.database.windows.net,1433;Database=HackTX2018;Uid=hacktx@hacktx2018;Pwd=Password1234;Encrypt=yes;TrustServerCertificate=no;")
+        cnx = pyodbc.connect("Driver={ODBC Driver 13 for SQL Server};Server=tcp:hacktx2018.database.windows.net,1433;Database=HackTX2018;Uid=hacktx@hacktx2018;Pwd=Password1234;Encrypt=yes;TrustServerCertificate=no;Connection Timeout=30;")
     except Exception as exp:
         print(exp)
 
