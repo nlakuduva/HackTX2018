@@ -13,10 +13,11 @@ def get_db_creds():
     db, username, password, hostname = "HackTX2018", "Hacktx", "Password1234", "hacktx2018.database.windows.net"
     return db, username, password, hostname
 
-
 def create_table():
     # Check if table exists or not. Create and populate it only if it does not exist.
     table_ddl = 'CREATE TABLE entrepreneurs(name VARCHAR, value INT, shares INT)'
+    table_ddl2 = 'CREATE TABLE funders(name VARCHAR)'
+    table_ddl2 = 'CREATE TABLE purchases(fund_name VARCHAR, entr_name VARCHAR, num_shares INT)'
 
     cnx = ''
     try:
@@ -68,6 +69,45 @@ def add_user():
         else:
             print("INSERTING user")
             cur.execute("INSERT INTO entrepreneurs (name, value, shares) values ('" + name + "', '" + value + "', '" + shares + "')")
+            message = ('User %s successfully inserted' % (name))
+            messages.append(dict(message=message))
+        cnx.commit()
+    except Exception as exp:
+        message = ('User %s could not be inserted - %s' % (name, exp))
+        messages.append(dict(message=message))
+
+    print("DONE")
+    return hello(messages)
+
+@app.route('/add_funder', methods=['POST'])
+def add_funder():
+    print("Received request.")
+    # print(request.form['name'])
+    name = str(request.form['name'])
+    print(name)
+
+    cnx = ''
+    try:
+        cnx = pyodbc.connect("Driver={ODBC Driver 13 for SQL Server};Server=tcp:hacktx2018.database.windows.net,1433;Database=HackTX2018;Uid=hacktx@hacktx2018;Pwd=Password1234;Encrypt=yes;TrustServerCertificate=no;Connection Timeout=30;")
+    except Exception as exp:
+        print(exp)
+
+    print("PAST CONNECTION")
+
+    cur = cnx.cursor()
+    messages = []
+    try:
+        print("START")
+        cur.execute("SELECT * FROM funders WHERE CONVERT(VARCHAR, name)='" + name + "'")
+        print("CHECKING IF EXISTS")
+        # user already in db
+        if len(cur.fetchall()) > 0:
+            message = ('User %s already in database. Please use Update user to edit user.' % (name))
+            messages.append(dict(message=message))
+        # user user
+        else:
+            print("INSERTING user")
+            cur.execute("INSERT INTO funders (name) values ('" + name + "')")
             message = ('User %s successfully inserted' % (name))
             messages.append(dict(message=message))
         cnx.commit()
@@ -145,6 +185,40 @@ def delete_user():
         message = ('user %s could not be deleted - %s' % (name, exp))
         messages.append(dict(message=message))
     return hello(messages)
+@app.route('/delete_funder', methods=['POST'])
+def delete_funder():
+    print("Received request.")
+    print(request.form['delete_name'])
+    name = request.form['delete_name']
+
+    db, username, password, hostname = get_db_creds()
+
+    cnx = ''
+    try:
+        cnx = pyodbc.connect("Driver={ODBC Driver 13 for SQL Server};Server=tcp:hacktx2018.database.windows.net,1433;Database=HackTX2018;Uid=hacktx@hacktx2018;Pwd=Password1234;Encrypt=yes;TrustServerCertificate=no;Connection Timeout=30;")
+    except Exception as exp:
+        print(exp)
+
+    cur = cnx.cursor()
+    messages = []
+    try:
+        print("DELETE START")
+        cur.execute("SELECT * FROM funders WHERE CONVERT(VARCHAR, name)='" + name + "'")
+        # delete user
+        if len(cur.fetchall()) > 0:
+            cur.execute("DELETE FROM funders WHERE CONVERT(VARCHAR, name)='" + name + "'")
+            message = ('user %s successfully deleted ' % (name))
+            messages.append(dict(message=message))
+        # user doesn't exist
+        else:
+            message = ('user with %s does not exist' % (name))
+            messages.append(dict(message=message))
+        cnx.commit()
+    except Exception as exp:
+        message = ('user %s could not be deleted - %s' % (name, exp))
+        messages.append(dict(message=message))
+    return hello(messages)
+
 
 @app.route('/search_user', methods=['GET'])
 def search_user():
@@ -170,6 +244,37 @@ def search_user():
         # entrepreneurs with actor doesn't exist
         else:
             message = ('No entrepreneurs found for user %s' % (user))
+            messages.append(dict(message=message))
+        cnx.commit()
+    except Exception as exp:
+        message = ('Serching failed - %s' % (exp))
+        messages.append(dict(message=message))
+    return hello(messages)
+
+@app.route('/search_funder', methods=['GET'])
+def search_funder():
+    print("Received request.")
+    user = request.args.get('search_user').upper()
+
+    db, username, password, hostname = get_db_creds()
+
+    cnx = ''
+    try:
+        cnx = pyodbc.connect("Driver={ODBC Driver 13 for SQL Server};Server=tcp:hacktx2018.database.windows.net,1433;Database=HackTX2018;Uid=hacktx@hacktx2018;Pwd=Password1234;Encrypt=yes;TrustServerCertificate=no;Connection Timeout=30;")
+    except Exception as exp:
+        print(exp)
+
+    cur = cnx.cursor()
+    messages = []
+    try:
+        cur.execute("SELECT name FROM funders WHERE CONVERT(VARCHAR, name)='" + user + "'")
+        # search
+        results = cur.fetchall()
+        if len(results) > 0:
+            messages = [dict(message=("Name: " + str(row[0]))) for row in results]
+        # entrepreneurs with actor doesn't exist
+        else:
+            message = ('No funders found for user %s' % (user))
             messages.append(dict(message=message))
         cnx.commit()
     except Exception as exp:

@@ -32,16 +32,20 @@
       Name: <input type="text" name="name"><br>
       Company Value: <input type="text" name="value"><br>
       Number of Shares: <input type="text" name="shares"><br>
-      <!-- Actor: <input type="text" name="actor"><br> -->
-      <!-- Release Date: <input type="text" name="release_date"><br> -->
-      <!-- Rating: <input type="text" name="rating"><br> -->
       <input type="submit" value="Insert User">
     </form>
+
+    <form action="add_funder" method="post">
+      <h4>Insert Funder</h4>
+      <br>
+      Name: <input type="text" name="name"><br>
+      <input type="submit" value="Insert Funder">
+    </form>
     
-<!--     <div class="footer">
+    <div class="footer">
     </div>
   </div>
-  <div class="bodycenter">
+<!--   <div class="bodycenter">
 
     <form action="update_user" method="post">
       <h4>Update Startup User</h4>
@@ -50,11 +54,11 @@
       Company Value: <input type="text" name="value"><br>
       Number of Shares: <input type="text" name="shares"><br>
       <input type="submit" value="Update user">
-    </form> -->
+    </form>
     
     <div class="footer">
     </div>
-  </div>
+  </div> -->
   <div class="bodycenter">
  
     <form action="delete_user" method="post">
@@ -62,6 +66,13 @@
       <br>
       Name: <input type="text" name="delete_name"><br>
       <input type="submit" value="Delete user">
+    </form>
+
+    <form action="delete_funder" method="post">
+      <h4>Delete Funder</h4>
+      <br>
+      Name: <input type="text" name="delete_name"><br>
+      <input type="submit" value="Delete funder">
     </form>
     
     <div class="footer">
@@ -74,6 +85,13 @@
       <br>
       Actor: <input type="text" name="search_user"><br>
       <input type="submit" value="Search entrepreneurs">
+    </form>
+
+    <form action="search_funder" method="get">
+      <h4>Search Funder</h4>
+      <br>
+      Actor: <input type="text" name="search_funder"><br>
+      <input type="submit" value="Search Funders">
     </form>
     
     <div class="footer">
